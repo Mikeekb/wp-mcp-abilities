@@ -1,0 +1,28 @@
+{
+  "name": "seomi/wp-mcp-abilities",
+  "description": "SEOMI MCP Abilities — modular WordPress mu-plugin exposing seomi/* abilities (content, taxonomy, media, WooCommerce) to AI agents via the MCP Adapter.",
+  "type": "wordpress-muplugin",
+  "license": "proprietary",
+  "homepage": "https://github.com/Mikeekb/wp-mcp-abilities",
+  "authors": [
+    {
+      "name": "SEOMI",
+      "homepage": "https://github.com/Mikeekb/wp-mcp-abilities"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  },
+  "suggest": {
+    "wordpress/abilities-api": "Required at runtime — install on the WordPress site as a regular plugin.",
+    "wordpress/mcp-adapter": "Required at runtime — install on the WordPress site as a regular plugin."
+  },
+  "autoload": {
+    "psr-4": {
+      "Seomi\\Mcp\\": "src/"
+    }
+  },
+  "extra": {
+    "installer-name": "seomi-mcp-abilities"
+  }
+}

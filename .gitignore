@@ -1,0 +1,11 @@
+# Editors
+.idea/
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Composer
+/vendor/
+/composer.lock
