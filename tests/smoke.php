@@ -12,6 +12,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// Authenticate as an admin so permission_callbacks on write-abilities pass.
+// In WP-CLI eval the current user is 0 by default, so manage_categories would fail.
+$admins = get_users( [ 'role' => 'administrator', 'number' => 1, 'fields' => 'ID' ] );
+if ( ! empty( $admins ) ) {
+	wp_set_current_user( (int) $admins[0] );
+}
+
 $failures = 0;
 $checks   = 0;
 
@@ -142,6 +149,91 @@ if ( function_exists( 'wp_get_ability' ) ) {
 	}
 } else {
 	echo "[SKIP] wp_get_ability() not available\n";
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 5. Rich HTML (tables) survives create-category and bulk-replace
+//    This is the core invariant the mu-plugin exists to protect — outside
+//    is_admin() context, wp_filter_kses would otherwise silently strip
+//    <table>/<tr>/<td>. with_admin_term_kses() must prevent that.
+// ─────────────────────────────────────────────────────────────────────
+
+if ( function_exists( 'wp_get_ability' ) ) {
+	$create_cat = wp_get_ability( 'seomi/create-category' );
+	$bulk_repl  = wp_get_ability( 'seomi/bulk-replace-in-term-descriptions' );
+	$update_cat = wp_get_ability( 'seomi/update-category' );
+
+	if ( $create_cat && $bulk_repl && $update_cat ) {
+		$slug           = 'seomi-mcp-smoke-table-' . substr( md5( (string) microtime( true ) ), 0, 8 );
+		$marker_initial = 'SEOMI_TABLE_MARKER_' . substr( md5( $slug ), 0, 8 );
+		$marker_after   = 'SEOMI_REPLACED_' . substr( md5( $slug ), 0, 8 );
+		$html           = "<p>Intro paragraph.</p>\n"
+			. "<table><thead><tr><th>Spec</th><th>Value</th></tr></thead>"
+			. "<tbody><tr><td>Field A</td><td>{$marker_initial}</td></tr>"
+			. "<tr><td>Field B</td><td>42</td></tr></tbody></table>\n"
+			. "<p>Outro paragraph.</p>";
+
+		// Idempotency: nuke any leftover term from a previous failed run.
+		$leftover = get_term_by( 'slug', $slug, 'category' );
+		if ( $leftover ) {
+			wp_delete_term( $leftover->term_id, 'category' );
+		}
+
+		$created = $create_cat->execute( [
+			'name'        => 'SEOMI MCP smoke — table preservation',
+			'slug'        => $slug,
+			'description' => $html,
+		] );
+
+		$term_id = is_array( $created ) && isset( $created['term_id'] ) ? (int) $created['term_id'] : 0;
+		$assert( 'create-category with HTML table returns term_id', $term_id > 0 );
+
+		if ( $term_id > 0 ) {
+			// Read back via raw DB query — what's actually stored.
+			$stored = get_term_field( 'description', $term_id, 'category', 'raw' );
+
+			$assert( 'table tag survives create-category', strpos( $stored, '<table>' ) !== false );
+			$assert(
+				'thead/tbody/td survive create-category',
+				strpos( $stored, '<thead>' ) !== false
+					&& strpos( $stored, '<tbody>' ) !== false
+					&& strpos( $stored, '<td>' ) !== false
+					&& strpos( $stored, '</table>' ) !== false
+			);
+			$assert( 'marker present inside the table cell', strpos( $stored, $marker_initial ) !== false );
+
+			// Update via seomi/update-category — round-trip with HTML edited inline.
+			$updated_html = str_replace( '<p>Outro paragraph.</p>', '<p>Outro edited.</p>', $stored );
+			$update_cat->execute( [
+				'term_id'     => $term_id,
+				'description' => $updated_html,
+			] );
+			$stored2 = get_term_field( 'description', $term_id, 'category', 'raw' );
+			$assert( 'table still intact after update-category', strpos( $stored2, '<table>' ) !== false && strpos( $stored2, '</table>' ) !== false );
+			$assert( 'inline edit applied (Outro changed)', strpos( $stored2, 'Outro edited.' ) !== false );
+
+			// Bulk-replace inside the cell — table must survive the rewrite.
+			$bulk_res = $bulk_repl->execute( [
+				'search'   => $marker_initial,
+				'replace'  => $marker_after,
+				'taxonomy' => 'category',
+			] );
+			$assert(
+				'bulk-replace updated_count >= 1 for our term',
+				is_array( $bulk_res ) && (int) ( $bulk_res['updated_count'] ?? 0 ) >= 1
+			);
+
+			$stored3 = get_term_field( 'description', $term_id, 'category', 'raw' );
+			$assert( 'table still intact after bulk-replace', strpos( $stored3, '<table>' ) !== false && strpos( $stored3, '</table>' ) !== false );
+			$assert( 'marker replaced inside cell', strpos( $stored3, $marker_after ) !== false );
+			$assert( 'old marker is gone', strpos( $stored3, $marker_initial ) === false );
+
+			// Cleanup.
+			wp_delete_term( $term_id, 'category' );
+		}
+	} else {
+		echo "[SKIP] Term CRUD abilities not all registered — cannot run table-preservation check\n";
+	}
 }
 
 // ─────────────────────────────────────────────────────────────────────
