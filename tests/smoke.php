@@ -76,12 +76,12 @@ if ( ! function_exists( 'wp_get_abilities' ) ) {
 
 	// WooCommerce abilities — present iff WC is loaded
 	$wc_abilities = [
-		'seomi/wc/get-products', 'seomi/wc/get-product',
-		'seomi/wc/create-product', 'seomi/wc/update-product', 'seomi/wc/delete-product',
-		'seomi/wc/update-product-price', 'seomi/wc/update-product-stock',
-		'seomi/wc/get-product-categories',
-		'seomi/wc/create-product-category', 'seomi/wc/update-product-category', 'seomi/wc/delete-product-category',
-		'seomi/wc/get-orders', 'seomi/wc/get-order', 'seomi/wc/update-order-status',
+		'seomi-wc/get-products', 'seomi-wc/get-product',
+		'seomi-wc/create-product', 'seomi-wc/update-product', 'seomi-wc/delete-product',
+		'seomi-wc/update-product-price', 'seomi-wc/update-product-stock',
+		'seomi-wc/get-product-categories',
+		'seomi-wc/create-product-category', 'seomi-wc/update-product-category', 'seomi-wc/delete-product-category',
+		'seomi-wc/get-orders', 'seomi-wc/get-order', 'seomi-wc/update-order-status',
 	];
 	if ( class_exists( 'WooCommerce' ) ) {
 		foreach ( $wc_abilities as $ability ) {

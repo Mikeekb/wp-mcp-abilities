@@ -30,7 +30,7 @@ class WooCommerce implements ModuleInterface {
 
 	private function register_products( array $mcp_meta ): void {
 
-		wp_register_ability( 'seomi/wc/get-products', [
+		wp_register_ability( 'seomi-wc/get-products', [
 			'label'        => 'WC: Get Products',
 			'description'  => 'List WooCommerce products with optional filters.',
 			'category'     => 'woocommerce',
@@ -83,7 +83,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/get-product', [
+		wp_register_ability( 'seomi-wc/get-product', [
 			'label'        => 'WC: Get Product',
 			'description'  => 'Get full data of a single product by ID (incl. ACF meta).',
 			'category'     => 'woocommerce',
@@ -119,7 +119,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/create-product', [
+		wp_register_ability( 'seomi-wc/create-product', [
 			'label'        => 'WC: Create Product',
 			'description'  => 'Create a new WooCommerce product (simple or variable).',
 			'category'     => 'woocommerce',
@@ -191,7 +191,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/update-product', [
+		wp_register_ability( 'seomi-wc/update-product', [
 			'label'        => 'WC: Update Product',
 			'description'  => 'Update an existing WooCommerce product by ID.',
 			'category'     => 'woocommerce',
@@ -255,7 +255,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/delete-product', [
+		wp_register_ability( 'seomi-wc/delete-product', [
 			'label'        => 'WC: Delete Product',
 			'description'  => 'Delete a product by ID. Set force=true to bypass trash.',
 			'category'     => 'woocommerce',
@@ -283,7 +283,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/update-product-price', [
+		wp_register_ability( 'seomi-wc/update-product-price', [
 			'label'        => 'WC: Update Product Price',
 			'description'  => 'Narrow ability to update only price fields of a product.',
 			'category'     => 'woocommerce',
@@ -313,7 +313,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/update-product-stock', [
+		wp_register_ability( 'seomi-wc/update-product-stock', [
 			'label'        => 'WC: Update Product Stock',
 			'description'  => 'Update stock status and optional stock quantity for a product.',
 			'category'     => 'woocommerce',
@@ -347,7 +347,7 @@ class WooCommerce implements ModuleInterface {
 
 	private function register_product_categories( array $mcp_meta ): void {
 
-		wp_register_ability( 'seomi/wc/get-product-categories', [
+		wp_register_ability( 'seomi-wc/get-product-categories', [
 			'label'        => 'WC: Get Product Categories',
 			'description'  => 'Retrieve product_cat taxonomy terms.',
 			'category'     => 'woocommerce',
@@ -388,7 +388,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/create-product-category', [
+		wp_register_ability( 'seomi-wc/create-product-category', [
 			'label'        => 'WC: Create Product Category',
 			'description'  => 'Create a new product_cat term.',
 			'category'     => 'woocommerce',
@@ -421,7 +421,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/update-product-category', [
+		wp_register_ability( 'seomi-wc/update-product-category', [
 			'label'        => 'WC: Update Product Category',
 			'description'  => 'Update a product_cat term by ID.',
 			'category'     => 'woocommerce',
@@ -456,7 +456,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/delete-product-category', [
+		wp_register_ability( 'seomi-wc/delete-product-category', [
 			'label'        => 'WC: Delete Product Category',
 			'description'  => 'Delete a product_cat term by ID.',
 			'category'     => 'woocommerce',
@@ -485,7 +485,7 @@ class WooCommerce implements ModuleInterface {
 
 	private function register_orders( array $mcp_meta ): void {
 
-		wp_register_ability( 'seomi/wc/get-orders', [
+		wp_register_ability( 'seomi-wc/get-orders', [
 			'label'        => 'WC: Get Orders',
 			'description'  => 'List WooCommerce orders with optional filters.',
 			'category'     => 'woocommerce',
@@ -526,7 +526,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/get-order', [
+		wp_register_ability( 'seomi-wc/get-order', [
 			'label'        => 'WC: Get Order',
 			'description'  => 'Get full data of a single order by ID (incl. line items).',
 			'category'     => 'woocommerce',
@@ -560,7 +560,7 @@ class WooCommerce implements ModuleInterface {
 			'meta'                => $mcp_meta,
 		] );
 
-		wp_register_ability( 'seomi/wc/update-order-status', [
+		wp_register_ability( 'seomi-wc/update-order-status', [
 			'label'        => 'WC: Update Order Status',
 			'description'  => 'Change the status of an order. Optionally add a customer-visible or private note.',
 			'category'     => 'woocommerce',

@@ -89,12 +89,12 @@ All abilities are registered under the `seomi/` prefix and visible to MCP client
 
 | Ability | Purpose |
 |---|---|
-| `seomi/wc/get-products`, `seomi/wc/get-product` | Read products |
-| `seomi/wc/create-product`, `seomi/wc/update-product`, `seomi/wc/delete-product` | CRUD via WC CRUD API |
-| `seomi/wc/update-product-price`, `seomi/wc/update-product-stock` | Narrow writes |
-| `seomi/wc/get-product-categories` + CRUD | `product_cat` terms |
-| `seomi/wc/get-orders`, `seomi/wc/get-order` | Read orders |
-| `seomi/wc/update-order-status` | Change order status |
+| `seomi-wc/get-products`, `seomi-wc/get-product` | Read products |
+| `seomi-wc/create-product`, `seomi-wc/update-product`, `seomi-wc/delete-product` | CRUD via WC CRUD API |
+| `seomi-wc/update-product-price`, `seomi-wc/update-product-stock` | Narrow writes |
+| `seomi-wc/get-product-categories` + CRUD | `product_cat` terms |
+| `seomi-wc/get-orders`, `seomi-wc/get-order` | Read orders |
+| `seomi-wc/update-order-status` | Change order status |
 
 All WC writes go through `wc_get_product()` / `$product->save()` (and `wc_get_order()` for orders) — never `wp_insert_post`. This keeps WooCommerce lookup tables in sync.
 
