@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       SEOMI MCP Abilities
  * Description:       Modular MCP abilities for WordPress content, taxonomy, media, and WooCommerce — for AI agents via the MCP Adapter plugin.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            SEOMI
  * Requires at least: 6.4
  * Requires PHP:      8.0
@@ -20,7 +20,7 @@ if ( defined( 'SEOMI_MCP_VERSION' ) ) {
 	return;
 }
 
-define( 'SEOMI_MCP_VERSION', '1.0.0' );
+define( 'SEOMI_MCP_VERSION', '1.1.0' );
 define( 'SEOMI_MCP_PATH', __DIR__ );
 
 spl_autoload_register( function ( $class ) {
