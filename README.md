@@ -155,4 +155,4 @@ When `WP_DEBUG=true`, every module logs registration and every write operation t
 
 ## License
 
-Proprietary — © SEOMI. (Adjust if open-sourcing.)
+Proprietary — © [SEOMI.RU](https://seomi.ru/).
