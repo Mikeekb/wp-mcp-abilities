@@ -145,13 +145,30 @@ Each check prints `[PASS]` or `[FAIL]`. Exit code is non-zero on any failure (CI
 
 ## Debug logging
 
-When `WP_DEBUG=true`, every module logs registration and every write operation to PHP error log with the prefix `[seomi-mcp]`:
+When `WP_DEBUG=true`, every module logs its write operations to the PHP error log with the prefix
+`[seomi-mcp]`:
 
 ```
-[seomi-mcp] booted v1.0.0, modules: posts,pages,terms,media,woocommerce
 [seomi-mcp] [posts] update-post id=42
 [seomi-mcp] [terms] bulk-replace taxonomy=category updated=17 errors=0
 ```
+
+The boot banner -- plugin version plus the list of enabled modules -- is **opt-in**. It fires on
+every single request, so with `WP_DEBUG` on a busy site it drowns out everything else in the log.
+It is worth having the first time an MCP integration misbehaves on a new project, so enable it
+deliberately in `wp-config.php`:
+
+```php
+define( 'SEOMI_MCP_VERBOSE_BOOT', true );
+```
+
+```
+[seomi-mcp] booted v1.1.0, modules: posts,pages,terms,media,woocommerce
+```
+
+A constant rather than a filter: mu-plugins load before themes and regular plugins, so nothing
+could have registered a filter callback by the time the banner runs, and `wp-config.php` is read
+first.
 
 ## License
 
