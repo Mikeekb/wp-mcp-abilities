@@ -64,7 +64,18 @@ add_action( 'wp_abilities_api_init', function () {
 	];
 
 	$enabled = apply_filters( 'seomi_mcp_modules', array_keys( $module_map ) );
-	seomi_mcp_log( 'booted v' . SEOMI_MCP_VERSION . ', modules: ' . implode( ',', $enabled ) );
+	// Boot banner: opt-in only. It fires on every request, so on a busy site with
+	// WP_DEBUG on it dominates debug.log while telling nothing new once the
+	// integration is known to work. It is worth having the first time an MCP setup
+	// misbehaves, hence a flag rather than a deletion.
+	//
+	// A constant, not a filter: mu-plugins load before themes and regular plugins,
+	// so nothing could have registered a callback by this point -- apply_filters()
+	// here would only ever see the default. A constant can be set in wp-config.php,
+	// which is loaded first. Define SEOMI_MCP_VERBOSE_BOOT as true to re-enable.
+	if ( defined( 'SEOMI_MCP_VERBOSE_BOOT' ) && SEOMI_MCP_VERBOSE_BOOT ) {
+		seomi_mcp_log( 'booted v' . SEOMI_MCP_VERSION . ', modules: ' . implode( ',', $enabled ) );
+	}
 
 	foreach ( $enabled as $key ) {
 		if ( ! isset( $module_map[ $key ] ) ) {
